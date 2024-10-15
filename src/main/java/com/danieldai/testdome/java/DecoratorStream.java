@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class DecoratorStream extends OutputStream
 {
@@ -32,7 +33,11 @@ public class DecoratorStream extends OutputStream
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        throw new UnsupportedOperationException("Waiting to be implemented.");
+        if (prefix != null) {
+            stream.write(prefix.getBytes(StandardCharsets.UTF_8));
+            prefix = null;
+        }
+        stream.write(b, off, len);
     }
 
     @Override
